@@ -32,6 +32,7 @@ dotnet run -- list
 dotnet run -- add
 dotnet run -- find
 dotnet run -- remove
+dotnet run -- mark
 dotnet run -- help
 ```
 

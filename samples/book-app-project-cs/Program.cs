@@ -75,6 +75,53 @@ void HandleFind()
     ShowBooks(books);
 }
 
+void HandleMark()
+{
+    Console.WriteLine("\nMark a Book as Read\n");
+
+    var books = collection.ListBooks();
+    ShowBooks(books);
+
+    if (books.Count == 0)
+    {
+        return;
+    }
+
+    Console.Write("Enter the number of the book to mark as read: ");
+    var selectionStr = Console.ReadLine()?.Trim() ?? "";
+
+    if (!int.TryParse(selectionStr, out var selection))
+    {
+        Console.WriteLine($"\nError: '{selectionStr}' is not a valid number.\n");
+        return;
+    }
+
+    if (selection < 1 || selection > books.Count)
+    {
+        Console.WriteLine("\nError: selection is out of range.\n");
+        return;
+    }
+
+    var book = books[selection - 1];
+
+    if (book.Read)
+    {
+        Console.WriteLine($"\n'{book.Title}' is already marked as read.\n");
+        return;
+    }
+
+    var result = collection.MarkAsRead(book.Title);
+
+    if (result)
+    {
+        Console.WriteLine($"\nMarked '{book.Title}' as read.\n");
+    }
+    else
+    {
+        Console.WriteLine("\nBook not found.\n");
+    }
+}
+
 void ShowHelp()
 {
     Console.WriteLine("""
@@ -86,6 +133,7 @@ void ShowHelp()
       add      - Add a new book
       remove   - Remove a book by title
       find     - Find books by author
+      mark     - Mark a book as read
       help     - Show this help message
     """);
 }
@@ -111,6 +159,9 @@ switch (command)
         break;
     case "find":
         HandleFind();
+        break;
+    case "mark":
+        HandleMark();
         break;
     case "help":
         ShowHelp();
